@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.client.dao.ConsultDao">
+	<insert id="save">
+		insert into consult (name, phone, qq, wechat,
+		mailbox, content, state) values
+		(#{name},#{phone},#{qq},#{wechat},#{mailbox},#{content},#{state})
+	</insert>
+	
+	<insert id="saveSignUp">
+		insert into signupclient (sign_name, sign_phone, sign_qq, sign_wechat,
+		sign_mailbox, sign_content) values
+		(#{signName},#{signPhone},#{signQq},#{signWechat},#{signMailbox},#{signContent})
+	</insert>
+	
+	<select id="getModuleResume" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select m.*,f.path
+		imgPath
+		from moduleResume m left join file f on m.img_id=f.id where
+		m.moduleType = #{moduleType} order by m.create_time
+	</select>
+	
+	<select id="getSignList" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select *
+		from signupmanage 
+		order by
+		create_time
+	</select>
+	
+	<select id="getSignUpList" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select s.*,f.path imgPath
+		from signupmanage s left join file f on s.img_id=f.id order by s.create_time limit
+		#{start},#{pageSize}
+	</select>
+	<select id="getSignUpCount" resultType="int">
+		select count(0)
+		from signupmanage
+	</select>
+	<select id="getSignListByPhone" resultType="int">
+		select count(0)
+		from signupclient where sign_phone = #{signPhone} and sign_content = #{signContent}
+	</select>
+</mapper>

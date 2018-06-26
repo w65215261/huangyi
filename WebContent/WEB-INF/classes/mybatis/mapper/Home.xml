@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.client.dao.HomeDao">
+
+	<select id="getBanners" resultType="hl.hyzx.client.dto.HomeDTO">
+		select b.*,f.path bannerPath from banner b left join file f on b.img_id=f.id
+	</select>
+	<select id="getSynopsisList" resultType="hl.hyzx.manage.dto.SynopsisManageDTO">
+		select s.*,f.path imgPath from synopsis s left join file f on s.img_id=f.id order by s.id
+	</select>
+	<select id="getOpinionList" resultType="hl.hyzx.manage.dto.OpinionManageDTO">
+		select s.*,f.path imgPath from opinions s left join file f on s.img_id=f.id order by s.id
+	</select>
+	<select id="getCaseList" resultType="hl.hyzx.manage.dto.CaseManageDTO">
+		select c.*,f.path imgPath
+		from casedata c left join file f on c.img_id=f.id order by c.create_time
+	</select>
+	<select id="getTeamMemberList" resultType="hl.hyzx.manage.dto.TeamMemberManageDTO">
+		select t.*,f.path imgPath
+		from teammember t left join file f on t.img_id=f.id order by t.create_time
+	</select>
+	<select id="getNewsConsultationList" resultType="hl.hyzx.manage.dto.NewsConsultationManageDTO">
+		select n.*,f.path imgPath
+		from newsConsultation n left join file f on n.img_id=f.id order by n.create_time
+	</select>
+	<select id="getModuleResumeList" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select m.*,f.path imgPath
+		from moduleResume m left join file f on m.img_id=f.id order by m.create_time
+	</select>
+</mapper>

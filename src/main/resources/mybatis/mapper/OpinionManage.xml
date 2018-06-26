@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.OpinionManageDao">
+
+	<select id="getOpinionList" resultType="hl.hyzx.manage.dto.OpinionManageDTO">
+		select o.*,f.path imgPath from opinions o left join file f on o.img_id=f.id order by o.id
+	</select>
+
+	<select id="getOpinion" resultType="hl.hyzx.manage.dto.OpinionManageDTO">
+		select o.*,f.path imgPath from opinions o left join file f on o.img_id=f.id where o.id=#{id}
+	</select>
+	
+	<insert id="save">
+		insert into opinions (img_id,content) values (#{imgId},#{content})
+	</insert>
+	
+	<update id="update">
+		update opinions set img_id=#{imgId},content=#{content}
+		where id=#{id}
+	</update>
+	
+</mapper>

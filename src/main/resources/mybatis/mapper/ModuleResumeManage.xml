@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.ModuleResumeManageDao">
+	<select id="getModuleResumeCount" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select m.*,f.path imgPath
+		from moduleResume m left join file f on m.img_id=f.id order by m.id
+	</select>
+	
+	<select id="queryByModuleType" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select * from moduleResume where moduleType =#{moduleType}
+	</select>
+	
+	<select id="getModuleResumeList" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select m.*,f.path imgPath
+		from moduleResume m left join file f on m.img_id=f.id order by m.create_time limit 
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getModuleResume" resultType="hl.hyzx.manage.dto.ModuleResumeManageDTO">
+		select m.*,f.path imgPath from
+		moduleResume m left join file f on m.img_id=f.id where m.id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into moduleResume (moduleType,resume,img_id) values
+		(#{moduleType},#{resume},#{imgId})
+	</insert>
+
+	<update id="update">
+		update moduleResume set moduleType=#{moduleType}, resume=#{resume},
+		img_id=#{imgId}
+		where id=#{id}
+	</update>
+	
+	<delete id="del">
+		delete from moduleResume where id =#{id}
+	</delete>
+</mapper>

@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	[#include "client/common/head.html" /]
+	<style type="text/css">
+	a:focus, a:hover {
+	    color: #23527c;
+	}
+	</style>
+</head>
+
+<body>
+	<div class="boxed_wrapper">
+		<section class="theme_menu stricky">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="main-logo">
+							<a href="${base}/"><img src="${base}/img/logo.png" alt=""></a>
+						</div>
+					</div>
+					<div class="col-md-8 menu-column">
+						<nav class="menuzord" id="main_menu">
+						   <ul class="menuzord-menu">
+								<li><a href="${base}/intoClient">走进皇壹</a></li>
+								<li><a href="${base}/flowPathClient">服务流程</a></li>
+								<li><a href="${base}/videoClient?parentId=1">皇壹商学院</a></li>
+								<li><a href="${base}/serviceMenuClient?parentId=3">服务菜单</a></li>
+								<li><a href="${base}/teamDetails">皇壹团队</a></li>	
+								<li><a href="${base}/consultClient">咨询报名</a></li>	
+								<li><a href="${base}/noticeClient?parentId=2">皇壹动态</a></li>
+								<li><a href="${base}/contactClient">战略合作</a></li>
+							</ul> <!-- End of .menuzord-menu -->
+						</nav> <!-- End of #main_menu -->
+					</div>
+				</div>
+			</div> <!-- End of .conatiner -->
+		</section> <!-- End of .theme_menu -->
+
+		<section class="page-title">
+        	<div class="container">
+            	<div class="row clearfix">
+                    <br><br><br>
+                </div>
+            </div>
+        </section>
+
+		<section class="contact_us">
+			<div class="container">  
+				<div class="col-md-12" style="padding-left: 30px;">
+					<ol class="breadcrumb" style="background-color: inherit;">
+					  <li><a href="${base}/">首页</a></li>
+					  <li class="active">咨询报名</li>
+					</ol>
+				</div>
+				<div class="col-md-4 col-sm-12 col-xs-12">
+					<div class="service-sidebar">
+						<ul class="service-catergory">
+							<li class="active"><a href="javascript:void(0)" onclick="signUpOrConsult(this,1)"><span class="icon-left fa fa-chevron-right"></span>咨询留言</a></li>
+							<li><a href="javascript:void(0)" onclick="signUpOrConsult(this,2)"><span class="icon-left fa fa-chevron-right"></span>培训报名</a></li>
+						</ul>                                                 
+					</div>
+				</div> 
+				<div class="col-md-8 col-sm-12 col-xs-12" id="consult">
+	                <div class="sec-title text-center">
+	                    <h2>咨询 <span>留言</span></h2>
+	                    [#if moduleConsult?? ]
+							<p>${moduleConsult.resume}</p>
+						[/#if]
+	                </div>
+	                <div class="default-form-area">
+						<form class="default-form">
+							<div class="row clearfix">
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="name" class="form-control" value="" placeholder="请输入姓名!">
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="email" id="mailbox" class="form-control" value="" placeholder="请输入邮箱地址!">
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="phone" class="form-control" placeholder="请输入手机号!">
+									</div>
+								</div>	
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="qq" class="form-control" placeholder="请输入QQ号码!">
+									</div>
+								</div>	
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="wechat" class="form-control" placeholder="请输入微信号码!">
+									</div>
+								</div>	
+								<div class="col-md-12 col-sm-12 col-xs-12">
+									<div class="form-group style-two">
+										<textarea id="content" class="form-control textarea" placeholder="请输入咨询内容!"></textarea>
+									</div>
+								</div>   											  
+							</div>
+							<div class="contact-section-btn text-center">
+								<div class="form-group style-two">
+									<button type="button" class="thm-btn thm-color" onclick="submitConsult();">提交</button>
+								</div>
+							</div> 
+							<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+								<div class="form-group style-two">
+									<h4 id = "msgId" style="color: #7aba1e"></h4>
+								</div>
+							</div>  
+						</form>
+					</div>   
+				</div>
+				
+				
+				<div class="col-md-8 col-sm-12 col-xs-12" id="signUp">
+	                <div class="sec-title text-center">
+	                    <h2>培训 <span>报名</span></h2>
+	                    [#if mr?? ]
+							<p>${mr.resume}</p>
+						[/#if]
+	                </div>
+					<div class="row clearfix" id="signUpShow">
+						
+					</div>
+					<div class="fy1 text-center">
+					
+					</div>
+				</div>
+				<!--分页-->
+				
+				
+				
+				       
+			</div>
+		</section>
+		<!-- footer -->
+		[#include "client/common/foot.html" /]
+		
+		<!-- Scroll Top Button -->
+		<button class="scroll-top tran3s color2_bg">
+			<span class="fa fa-angle-up"></span>
+		</button>
+		<!-- pre loader  -->
+		<div class="preloader"></div>
+		[#include "client/common/js.html" /]
+	</div>
+	<script>
+	$(function(){
+		$("#consult").show();
+		$("#signUp").hide();
+	})
+	function signUpOrConsult(e,flag){
+		$(".service-catergory").find("li").removeClass("active");
+		$(e).parent().addClass("active");
+		if(flag == 1){
+			$("#consult").show();
+			$("#signUp").hide();
+		}else if(flag == 2){
+			$("#consult").hide();
+			$("#signUp").show();
+			signUpClient(1);
+		}
+	}
+	function submitConsult(){
+		var name = $("#name").val().trim();
+    	if(name == ""){
+    		$("#msgId").text("名字不能为空！");
+    		errorColor("msgId",0);
+    		return false;
+    	}
+		var phone = $("#phone").val().trim();
+		if(phone == ""){
+			$("#msgId").text("电话号码不能为空！");
+			errorColor("msgId",0);
+    		return;
+    	}
+		if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(phone))){ 
+			$("#msgId").text("不是完整的11位手机号或者正确的手机号前七位！");
+			errorColor("msgId",0);
+    		return;
+		}
+		var qq = $("#qq").val();
+		var wechat = $("#wechat").val();
+		var mailbox = $("#mailbox").val().trim();
+		if(mailbox == ""){
+			$("#msgId").text("邮箱不能为空！");
+			errorColor("msgId",0);
+    		return;
+    	}
+		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+		if(!myreg.test(mailbox)){
+			$("#msgId").text("请输入有效的E_mail！");
+			errorColor("msgId",0);
+    		return;
+		}
+		var content = $("#content").val().trim();
+		if(content == ""){
+			$("#msgId").text("咨询内容不能为空！");
+			errorColor("msgId",0);
+    		return;
+    	}
+		$.post("${base}/save",{
+    		name : name,
+    		phone :parseInt(phone),
+    		qq : qq,
+    		wechat : wechat,
+    		mailbox : mailbox,
+    		content : content,
+    		state : 2
+    	},function(r){
+    		resetForm();
+    		if(r.code==0){
+    			errorColor("msgId",1);
+    			$("#msgId").text("发送成功！");
+    		}else{
+    			errorColor("msgId",0);
+    			$("#msgId").text("发送失败！");
+    		}
+    	},'json')
+	}
+	function resetForm(){
+		$("#name").val("");
+		$("#phone").val("");
+		$("#qq").val("");
+		$("#wechat").val("");
+		$("#mailbox").val("");
+		$("#content").val("");
+		$("#msgId").text("");
+	}
+	
+	function errorColor(id,flag){ 
+		if(flag == 0){
+			$("#msgId").removeAttr("style");
+			$("#msgId").attr("style","color:red");
+		}else{
+			$("#msgId").removeAttr("style");
+			$("#msgId").attr("style","color:#7aba1e");
+		}
+		
+	}
+	function signUpClient(page){
+		$.post("${base}/signUpShow/",{
+    		currPage : page
+    	},function(r){
+    		$("#signUpShow").empty();
+			$(".fy1").empty();
+			var currPage = r.currPage;
+			var pageCount = r.pageCount;
+			$(".fy1").append(currPage+'/'+pageCount+' 页 <span id="page"></span>');
+			var p="",n="";
+			
+			if(pageCount != 1){
+				if(currPage == 1){
+					p='<button type="button" class="btn btn-link pull-left" disabled>上一页</button>';
+					n='<button type="button" class="btn btn-link pull-right" onclick="signUpClient('+(currPage+1)+')">下一页</button>';
+				}else if(currPage == pageCount){
+					p='<button type="button" class="btn btn-link pull-left" onclick="signUpClient('+(currPage-1)+')">上一页</button>';
+					n='<button type="button" class="btn btn-link pull-right" disabled>下一页</button>';
+				}else{
+					p='<button type="button" class="btn btn-link pull-left" onclick="signUpClient('+(currPage-1)+')">上一页</button>';
+					n='<button type="button" class="btn btn-link pull-right" onclick="signUpClient('+(currPage+1)+')">下一页</button>';
+				}
+	
+			}
+	
+			$("#page").html(p + n);
+			for(var i = 0;i<r.signUps.length;i++){
+				$("#signUpShow").append('<div class="col-md-6 col-sm-6 col-xs-12"><div class="single-item"><div class="img-holder"><img src="${base}/'+r.signUps[i].imgPath+'" alt="Awesome Image" height="200px"></div><div class="content-holder hvr-sweep-to-bottom" style="margin-bottom: 20px;margin-top: 10px"><h4><a href="javascript:void(0)" onclick="signUpDetails('+r.signUps[i].id+')">'+r.signUps[i].title+'</a></h4></div></div></div>');
+			}
+		},'json')
+	}
+	function signUpDetails(id){
+		window.location.href = "${base}/signUpsClient?id="+id;
+	}
+	</script>
+</body>
+</html>

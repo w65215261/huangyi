@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.NewsConsultationManageDao">
+	<select id="getNewsConsultationCount" resultType="hl.hyzx.manage.dto.NewsConsultationManageDTO">
+		select n.*,f.path imgPath
+		from newsConsultation n left join file f on n.img_id=f.id order by n.id
+	</select>
+	
+	<select id="getNewsConsultationList" resultType="hl.hyzx.manage.dto.NewsConsultationManageDTO">
+		select n.*,f.path imgPath
+		from newsConsultation n left join file f on n.img_id=f.id order by n.create_time limit 
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getNewsConsultation" resultType="hl.hyzx.manage.dto.NewsConsultationManageDTO">
+		select n.*,f.path imgPath from
+		newsConsultation n left join file f on n.img_id=f.id where n.id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into newsConsultation (newsTitle,author,img_id,content,newsTime) values
+		(#{newsTitle},#{author},#{imgId},#{content},#{newsTime})
+	</insert>
+
+	<update id="update">
+		update newsConsultation set newsTitle=#{newsTitle},author=#{author},
+		img_id=#{imgId},content=#{content},newsTime=#{newsTime}
+		where id=#{id}
+	</update>
+	
+	<delete id="del">
+		delete from newsConsultation where id =#{id}
+	</delete>
+</mapper>

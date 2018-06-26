@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.client.dao.DetailsDao">
+
+	<select id="getCase" resultType="hl.hyzx.manage.dto.CaseManageDTO">
+		select c.*,f.path imgPath from
+		casedata c left join file f on c.img_id=f.id where c.id=#{id}
+	</select>
+	<select id="getNewsConsultation" resultType="hl.hyzx.manage.dto.NewsConsultationManageDTO">
+		select n.*,f.path imgPath from
+		newsconsultation n left join file f on n.img_id=f.id where n.id=#{id}
+	</select>
+	
+	<select id="getNotices" resultType="hl.hyzx.client.dto.NoticesDTO">
+		select n.*,f.path imgPath from
+		notice n left join file f on n.img_id=f.id where n.id=#{id}
+	</select>
+	
+	<select id="getVideos" resultType="hl.hyzx.client.dto.VideosDTO">
+		select v.*,f.path videoPath from
+		video v left join file f on v.video_id=f.id where v.id=#{id}
+	</select>
+	<select id="getSignUps" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select * from
+		signupmanage where id=#{id}
+	</select>
+</mapper>

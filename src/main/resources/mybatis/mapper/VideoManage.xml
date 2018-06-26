@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.VideoManageDao">
+	<select id="getVideoCount" resultType="hl.hyzx.manage.dto.VideoManageDTO">
+		select v.*,f.path
+		videoPath
+		from video v left join file f on v.video_id=f.id order by
+		v.id
+	</select>
+
+	<select id="getVideoList" resultType="hl.hyzx.manage.dto.VideoManageDTO">
+		select v.*,f.path
+		videoPath,e.path imgPath
+		from video v left join file f on
+		v.video_id=f.id left JOIN file e on v.img_id=e.id order by
+		v.classification DESC,v.create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getVideo" resultType="hl.hyzx.manage.dto.VideoManageDTO">
+		select v.*,f.path videoPath,e.path imgPath
+		from
+		video v left join file f on v.video_id=f.id left JOIN file e on v.img_id=e.id where v.id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into video
+		(name,resume,classification,video_id,img_id,content,video_name,classificationName)
+		values
+		(#{name},#{resume},#{classification},#{videoId},#{imgId},#{content},#{videoName},#{classificationName})
+	</insert>
+
+	<update id="update">
+		update video set resume=#{resume},name=#{name},
+		video_id=#{videoId},img_id=#{imgId},content=#{content},classification=#{classification},video_name=#{videoName},classificationName=#{classificationName}
+		where id=#{id}
+	</update>
+
+	<delete id="del">
+		delete from video where id =#{id}
+	</delete>
+</mapper>

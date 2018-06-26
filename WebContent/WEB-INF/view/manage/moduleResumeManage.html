@@ -1,0 +1,322 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+[#include "manage/common/head.html" /]
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑栏目</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <button id="add" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-title="新建" data-target="#moduleResumeModal">添加</button>
+                        <table class="table table-striped table-bordered table-hover dataTables">
+                            <thead>
+                                <tr>
+                                    <th class="text-center">栏目名称</th>
+                                    <th class="text-center">栏目简述</th>
+                                    <th class="text-center">栏目图片</th>
+                                    <th class="text-center">操作项</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="moduleResumeModal" tabindex="-1" role="dialog" aria-hidden="true" >
+       	<div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">新建</h4>
+                </div>
+                <div class="modal-body">
+					<form class="form-horizontal" id="myForm">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">栏目名称</label>
+							<div class="col-sm-8">
+								<select id="moduleType"
+										class="selectpicker show-tick form-control"
+										data-live-search="false">
+										<option value="0"></option>
+										<option value="1">经典案例</option>
+										<option value="2">皇壹团队</option>
+										<option value="3">皇壹观点</option>
+										<option value="4">新闻咨询</option>
+										<option value="5">咨询留言</option>
+										<option value="6">培训报名</option>
+								</select>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">栏目简述</label>
+							<div class="col-sm-8">
+								<textarea class="form-control" id="resume" rows="3"></textarea>
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">栏目图片</label>
+							<div class="col-sm-8" id="imgUpload1">
+								<div id="img1" class="uploader-list"></div>
+								<div id="progress1"></div>
+								<div id="filePicker1">选择图片</div>
+							</div>
+						</div>
+					</form>
+                </div>
+                <div class="modal-footer clearfix">
+                    <div class="form-group col-md-8 col-sm-offset-2 text-center">
+                        <button type="button" class="btn btn-primary" id="save">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    [#include "manage/common/js.html" /]
+    <script>
+	   function restForm(){
+		   	$("#moduleType").val("");
+		   	$("#resume").val("");
+		   	$('#img1').empty();
+		   	$('#progress1').empty();
+	   } 
+	   
+	   $("#moduleResumeModal").on("hidden.bs.modal", function() {
+		   restForm();
+		});
+    
+    	var imgId = 0;
+		var moduleResumeId = 0;
+		$('#moduleResumeModal').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget);
+			var recipient = button.data('title');
+			var modal = $(this);
+			modal.find('.modal-title').text(recipient);
+			
+			if(recipient == "编辑"){
+				$.post("${base}/manage/moduleResume/getModuleResume/"+button.data('id'),function(r){
+					imgId = r.moduleResume.imgId;
+					moduleResumeId = r.moduleResume.id;
+					if(imgId != 0){
+						$("#img1").html('<img src="${base}/'+r.moduleResume.imgPath+'" alt="..." height="100px;"/>');
+		        	}
+				},'json')
+			}else{
+				moduleResumeId = 0;
+				imgId = 0;
+			}
+		});
+
+		var uploader1 = WebUploader.create({
+			auto : true,
+			swf : '${base}/plugin/webuploader/Uploader.swf',
+			server : '${base}/manage/upload',
+			pick : '#filePicker1',
+			method : "POST",
+			accept : {
+				title : 'Images',
+				extensions : 'gif,jpg,jpeg,bmp,png',
+				mimeTypes : 'image/*'
+			},
+			resize : false,
+			sendAsBinary : false,
+			fileNumLimit : 1
+		});
+
+		uploader1.on('fileQueued', function(file) {
+			uploader1.makeThumb(file, function(error, src) {
+				if (error) {
+					$img.replaceWith('<span>不能预览</span>');
+					return;
+				}
+				$("#img1").html('<img src="'+src+'" alt="..."/>');
+				$("#img1").addClass("img-show");
+			}, 100, 100);
+		});
+
+		uploader1.on('uploadProgress', function(file, percentage) {
+			var $li = $('#' + file.id), $percent = $li.find('.progress span');
+
+			if (!$percent.length) {
+				$percent = $('<p class="progress"><span></span></p>').appendTo(
+						$li).find('span');
+			}
+			$("#progress1").html(parseInt(percentage * 100) + '%');
+		});
+
+		uploader1.on('beforeFileQueued', function(file) {
+			uploader1.reset();
+		});
+
+		uploader1.on('uploadSuccess', function(file, r) {
+			imgId = r.file.id;
+			$('#' + file.id).addClass('upload-state-done');
+			$("#img1").append('<p>已上传</p>');
+		});
+
+		uploader1.on('uploadError', function(file) {
+			var $li = $('#' + file.id), $error = $li.find('div.error');
+
+			if (!$error.length) {
+				$error = $('<div class="error"></div>').appendTo($li);
+			}
+
+			$error.text('上传失败');
+		});
+		
+        $(function(){
+        	dt = $('.dataTables').dataTable({
+				"ordering" : false,
+				"searching" : false,
+				"info" : true,
+				"bLengthChange" : false,
+				"pagingType" : "full_numbers",
+				"language" : {
+					"lengthMenu" : "每页 _MENU_ 条记录",
+					"zeroRecords" : "没有找到记录",
+					"info" : "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+					"infoEmpty" : "无记录",
+					"infoFiltered" : "(从 _MAX_ 条记录过滤)",
+					"sEmptyTable" : "表中数据为空",
+					"sLoadingRecords" : "载入中...",
+					"oPaginate" : {
+						"sFirst" : "首页",
+						"sPrevious" : "上一页",
+						"sNext" : "下一页",
+						"sLast" : "末页"
+					}
+				},
+				"serverSide" : true,
+				"sAjaxSource" : "${base}/manage/moduleResume/getModuleResumeList",
+				"columns" : [ {
+					"data" : "moduleType",
+					"sWidth": "20%",
+                    "render": function (odata) {
+                        if (odata == 1) {
+                            return "经典案例";
+                        } else if (odata == 2) {
+                            return "皇壹团队";
+                        } else if (odata == 3) {
+                            return "皇壹观点";
+                        } else if (odata == 4) {
+                            return "新闻咨询";
+                        } else if (odata == 5) {
+                            return "咨询留言";
+                        } else if (odata == 6) {
+                            return "培训报名";
+                        }
+                    }
+				}, {
+					"data" : "resume",
+					"sWidth": "30%"
+				}, {
+					"data" : "imgPath",
+					"sWidth": "40%",
+					"render" : function(data) {
+						if(data != "" && data != null){
+							return '<img src="${base}/'+data+'" alt="..." height="100px;"/>'
+						} else return "";
+					}
+				}, {
+					"data" : "id",
+					"sWidth": "10%",
+					"render" : function(data) {
+						return '<div class="text-center"><button class="btn btn-info btn-sm" type="button" data-title="编辑" data-toggle="modal" data-target="#moduleResumeModal" data-id="'+ data+'" onclick="edit('+ data+')">编辑</button>'+
+						'&nbsp;&nbsp;<button class="btn btn-warning btn-sm" type="button" onclick="del('+ data +')">删除</button><div>';
+					}
+				}  ],
+				"fnServerData" : function(sSource, aoData, fnCallback) {
+					$.ajax({
+						"dataType" : 'json',
+						"type" : "POST",
+						"url" : sSource,
+						"data" : aoData,
+						"success" : fnCallback
+					});
+				}
+			});
+        	
+        })
+        
+        function search(){
+ 			dt.fnFilter();
+ 		}
+	    
+        $("#save").click(function(){
+        	var moduleType = $("#moduleType").val();
+        	if(moduleType == 0){
+        		swal("警告","栏目名称不能为空！","warning");
+        		return;
+        	}
+        	var resume = $("#resume").val().trim();
+        	if(resume == 0){
+        		swal("警告","栏目简述不能为空！","warning");
+        		return;
+        	}
+        	$.post("${base}/manage/moduleResume/queryByModuleType",{
+        		id:moduleResumeId,
+        		moduleType: moduleType
+        	},function(r){
+        		if(r.code==0){
+        			$.post("${base}/manage/moduleResume/save",{
+                		id:moduleResumeId,
+                		moduleType: moduleType,
+                		resume: resume,
+                		imgId: imgId
+                	},function(r){
+                		if(r.code==0){
+                			swal("成功","保存完成！","success");
+                			$('#moduleResumeModal').modal('hide');
+                			search();
+                		}else{
+                			swal("错误",r.msg,"error");
+                		}
+                	},'json')
+        		}else{
+        			swal("错误",r.msg,"error");
+        		}
+        	},'json')
+        })
+        
+        function edit(id){
+        	$.post("${base}/manage/moduleResume/getModuleResume/"+id,function(r){
+				imgId = r.moduleResume.imgId;
+				moduleResumeId = r.moduleResume.id;
+				$("#moduleType").val(r.moduleResume.moduleType);
+	        	$("#resume").val(r.moduleResume.resume);
+	        	moduleResumeId = id;
+			},'json')
+        	
+        }
+        
+        function del(id){
+        	swal({
+				  title: '确定要删除吗?',
+				  type: 'warning',
+				  showCancelButton: true,
+				  cancelButtonColor: '#3085d6',
+				  confirmButtonColor: '#d33',
+				  confirmButtonText: '是的,确定!',
+				  cancelButtonText: '取消'
+				}).then(function () {
+					$.post("${base}/manage/moduleResume/del/"+id,function(r){
+		        		if(r.code==0){
+		        			swal("成功","已经删除！","success");
+		        			search();
+		        		}
+		        	},'json')
+				})
+        }
+    </script>
+</body>
+</html>

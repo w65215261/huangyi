@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	[#include "client/common/head.html" /]
+</head>
+
+<body>
+	<div class="boxed_wrapper">
+		<section class="theme_menu stricky">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="main-logo">
+							<a href="${base}/"><img src="${base}/img/logo.png" alt=""></a>
+						</div>
+					</div>
+					<div class="col-md-8 menu-column">
+						<nav class="menuzord" id="main_menu">
+						   <ul class="menuzord-menu">
+								<li><a href="${base}/intoClient">走进皇壹</a></li>
+								<li><a href="${base}/flowPathClient">服务流程</a></li>
+								<li><a href="${base}/videoClient?parentId=1">皇壹商学院</a></li>
+								<li><a href="${base}/serviceMenuClient?parentId=3">服务菜单</a></li>
+								<li><a href="${base}/teamDetails">皇壹团队</a></li>	
+								<li><a href="${base}/consultClient">咨询报名</a></li>	
+								<li><a href="${base}/noticeClient?parentId=2">皇壹动态</a></li>
+								<li><a href="${base}/contactClient">战略合作</a></li>
+							</ul> <!-- End of .menuzord-menu -->
+						</nav> <!-- End of #main_menu -->
+					</div>
+				</div>
+			</div> <!-- End of .conatiner -->
+		</section> <!-- End of .theme_menu -->
+
+		<section class="page-title">
+        	<div class="container">
+            	<div class="row clearfix">
+                    <br><br><br>
+                </div>
+            </div>
+        </section>
+        
+		<section class="service-single">
+			<div class="container">
+				<div class="col-md-12" style="padding-left: 30px;">
+					<ol class="breadcrumb" style="background-color: inherit;">
+					  <li><a href="${base}/">首页</a></li>
+					  <li class="active">服务菜单</li>
+					</ol>
+				</div>
+				<div class="row">     
+					<div class="col-md-5 col-sm-12 col-xs-12">          
+						<div class="service-sidebar">
+							<ul class="service-catergory">
+							[#list menuSelect as ms]
+								[#if ms_index==0]
+								<li class="active"><a href="javascript:void(0)" onclick="addClass(this,${ms.id})"><span class="icon-left fa fa-chevron-right"></span>${ms.name}</a></li>
+								[/#if]
+								[#if ms_index!=0]
+								<li><a href="javascript:void(0)" onclick="addClass(this,${ms.id})"><span class="icon-left fa fa-chevron-right"></span>${ms.name}</a></li>
+								[/#if]
+							[/#list]
+							</ul>                                                 
+						</div>
+					</div>
+					<div class="col-md-7 col-sm-12 col-xs-12" id="us">
+						<div class="outer-box">
+							<div class="content-box" id="serviceMenuShow">
+								
+							</div>						                                                       
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+
+	<!-- footer -->
+	[#include "client/common/foot.html" /]
+
+	<!-- Scroll Top Button -->
+	<button class="scroll-top tran3s color2_bg">
+		<span class="fa fa-angle-up"></span>
+	</button>
+	<!-- pre loader  -->
+	<div class="preloader"></div>
+		[#include "client/common/js.html" /]
+	</div>
+	<script>
+	[#list menuSelect as m]
+	    [#if m_index == 0]
+			var serviceMenuType = '${m.id}';
+			$(function(){
+				$.post("${base}/serviceMenuShow",{
+						serviceMenuType : serviceMenuType
+		        	},function(r){
+						$("#serviceMenuShow").empty();
+						$("#serviceMenuShow").append('<div class="sec-title text-center" style="margin-top: 50px;"><h2>'+r.serviceMenu.title+'</h2></div>');
+						$("#serviceMenuShow").append(r.serviceMenu.content);
+				},'json')
+			})
+			[#break]
+	    [/#if]
+	[/#list]
+	function addClass(e,serviceMenuType){
+		$(".service-catergory").find("li").removeClass("active");
+		$(e).parent().addClass("active");
+		serviceMenuClient(serviceMenuType);
+	}		
+			
+	function serviceMenuClient(serviceMenuType){
+		$.post("${base}/serviceMenuShow/",{
+			serviceMenuType : serviceMenuType
+    	},function(r){
+    		$("#serviceMenuShow").empty();
+			$("#serviceMenuShow").append('<div class="sec-title text-center" style="margin-top: 50px;"><h2>'+r.serviceMenu.title+'</h2></div>');
+			$("#serviceMenuShow").append(r.serviceMenu.content);
+		},'json')
+	}
+	</script>
+</body>
+</html>

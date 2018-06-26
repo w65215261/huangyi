@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	[#include "client/common/head.html" /]
+</head>
+
+<body>
+	<div class="boxed_wrapper">
+		<!-- Menu -->
+		<section class="theme_menu stricky">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="main-logo">
+							<a href="${base}/"><img src="${base}/img/logo.png" alt=""></a>
+						</div>
+					</div>
+					<div class="col-md-8 menu-column">
+						<nav class="menuzord" id="main_menu">
+						   <ul class="menuzord-menu">
+								<li><a href="${base}/intoClient">走进皇壹</a></li>
+								<li><a href="${base}/flowPathClient">服务流程</a></li>
+								<li><a href="${base}/videoClient?parentId=1">皇壹商学院</a></li>
+								<li><a href="${base}/serviceMenuClient?parentId=3">服务菜单</a></li>
+								<li><a href="${base}/teamDetails">皇壹团队</a></li>	
+								<li><a href="${base}/consultClient">咨询报名</a></li>	
+								<li><a href="${base}/noticeClient?parentId=2">皇壹动态</a></li>
+								<li><a href="${base}/contactClient">战略合作</a></li>
+							</ul> <!-- End of .menuzord-menu -->
+						</nav> <!-- End of #main_menu -->
+					</div>
+				</div>
+			</div> <!-- End of .conatiner -->
+		</section> <!-- End of .theme_menu -->
+
+		<!--Page Title-->
+        <section class="page-title">
+        	<div class="container">
+            	<div class="row clearfix">
+                    <br><br><br>
+                </div>
+            </div>
+        </section>
+        <!--Page Title Ends-->
+		
+		<section class="service-single">
+			<div class="container">
+				<div class="row">     
+					<div class="col-md-12">
+						<!-- <div class="outer-box col-md-12">
+							<div class="text-center" style="margin-bottom: 100px">
+								<h2>皇壹 <span style="color: #7aba1e">管理人</span></h2>
+							</div>
+							[#list leads as lead]
+							<div class="col-md-4" style="margin-top: 10px;">
+								<div class="img-box col-md-12">
+	    							<img src="${base}/${lead.imgPath}" height="350px" alt="">
+								</div>
+								<div class="col-md-12" style="margin-top: 10px">
+									<h3>${lead.name}</h3>
+									<h4 style="margin-top: 5px;color: #7aba1e">${lead.position}</h4>
+									[#list lead.positionalTitles?split(",") as pT]  
+									<p style="margin-top: 2px">${pT}</p>
+		            				[/#list]  
+								</div>
+							</div>	
+							[/#list]
+						</div>
+						<hr class="col-md-12" style="margin: 80px 0 80px 0"> -->
+						<div class="outer-box col-md-12">
+							<div class="text-center" style="margin-bottom: 100px;">
+							<h2>皇壹 <span style="color: #7aba1e">团队</span></h2>
+							</div>
+							[#list staffs as staff]
+							<div class="col-md-3" style="height: 600px;">
+								<div class="img-box col-md-12">
+	    							<img src="${base}/${staff.imgPath}" height="300px" alt="">
+								</div>
+								<div class="col-md-12" style="margin-top: 10px;">
+									<h3>${staff.name}</h3>
+									<h4 style="margin-top: 5px;color: #7aba1e">${staff.position}</h4>
+									[#list staff.positionalTitles?split(",") as pTs] 
+									<p style="margin-top: 2px">${pTs}</p>
+									[/#list] 
+								</div>
+							</div>	
+							[/#list]
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		
+	<!-- footer -->
+	[#include "client/common/foot.html" /]
+
+	<!-- Scroll Top Button -->
+	<button class="scroll-top tran3s color2_bg">
+		<span class="fa fa-angle-up"></span>
+	</button>
+	<!-- pre loader  -->
+	<div class="preloader"></div>
+
+		[#include "client/common/js.html" /]
+
+	</div>
+	
+</body>
+</html>
+
+
+
+

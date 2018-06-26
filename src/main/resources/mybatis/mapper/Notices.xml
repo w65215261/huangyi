@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.client.dao.NoticesDao">
+	<select id="getNoticeList" resultType="hl.hyzx.client.dto.NoticesDTO">
+		select n.*,f.path imgPath
+		from notice n left join file f on n.img_id=f.id
+		where n.notice_Type=#{noticeType} order by n.create_time limit
+		#{start},#{pageSize}
+	</select>
+	<select id="getNoticeCount" resultType="int">
+		select count(0)
+		from notice
+		where notice_Type=#{noticeType}
+	</select>
+</mapper>

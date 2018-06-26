@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.SignUpManageDao">
+	<select id="getSignUpCount" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select *
+		from signupmanage
+		order by create_time
+	</select>
+	<select id="getSignUpList" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select s.*,f.path imgPath
+		from signupmanage s left join file f on s.img_id=f.id 
+		order by s.create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+	<insert id="save">
+		insert into signupmanage (title,content,img_id) values
+		(#{title},#{content},#{imgId})
+	</insert>
+	<update id="update">
+		update signupmanage set title=#{title},
+		content=#{content},img_id=#{imgId}
+		where id=#{id}
+	</update>
+	<select id="getSignUp" resultType="hl.hyzx.manage.dto.SignUpManageDTO">
+		select s.*,f.path imgPath
+		from signupmanage s left join file f on s.img_id=f.id 
+		where
+		s.id=#{id}
+	</select>
+	<delete id="del">
+		delete from signupmanage where id =#{id}
+	</delete>
+
+	<select id="getSignUpShowCount" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select *
+		from
+		signupclient
+		order by create_time
+	</select>
+	<select id="getSignUpShowList" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select c.*,m.title
+		signTitle,m.content signContent
+		from signupclient c left join
+		signupmanage m on c.sign_content=m.id
+		order by c.create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+	<select id="getSignUpShow" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select c.*,m.title
+		signTitle,m.content signContent
+		from signupclient c left join
+		signupmanage m on c.sign_content=m.id where
+		c.id=#{id}
+	</select>
+	<delete id="delShow">
+		delete from signupclient where id =#{id}
+	</delete>
+	
+	<select id="getSignUpShowCountByTiaojian" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select *
+		from
+		signupclient 
+		where sign_name LIKE CONCAT('%', #{tiaojian}, '%') or sign_phone LIKE CONCAT('%', #{tiaojian}, '%')
+		order by create_time
+	</select>
+	<select id="getSignUpShowListByTiaojian" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select c.*,m.title
+		signTitle,m.content signContent
+		from signupclient c left join
+		signupmanage m on c.sign_content=m.id
+		where sign_name LIKE CONCAT('%', #{tiaojian}, '%') or sign_phone LIKE CONCAT('%', #{tiaojian}, '%')
+		order by c.create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+	
+	<select id="getSignListByTiaojian" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select c.*,m.title
+		signTitle,m.content signContent
+		from signupclient c left join
+		signupmanage m on c.sign_content=m.id
+		where sign_name LIKE CONCAT('%', #{tiaojian}, '%') or sign_phone LIKE CONCAT('%', #{tiaojian}, '%')
+		order by c.create_time
+	</select>
+	<select id="getSignList" resultType="hl.hyzx.manage.dto.SignUpShowManageDTO">
+		select c.*,m.title
+		signTitle,m.content signContent
+		from signupclient c left join
+		signupmanage m on c.sign_content=m.id
+		order by c.create_time
+	</select>
+</mapper>

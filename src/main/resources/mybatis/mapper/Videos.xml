@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.client.dao.VideosDao">
+	<select id="getVideoList" resultType="hl.hyzx.client.dto.VideosDTO">
+		select v.*,f.path imgPath
+		from video v left join file f on v.img_id=f.id
+		where v.classification=#{classification} order by v.create_time limit
+		#{start},#{pageSize}
+	</select>
+	<select id="getVideoCount" resultType="int">
+		select count(0)
+		from video
+		where classification=#{classification}
+	</select>
+</mapper>

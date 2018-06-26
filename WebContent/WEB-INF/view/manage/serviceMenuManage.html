@@ -1,0 +1,250 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+[#include "manage/common/head.html" /]
+</head>
+
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="ibox float-e-margins">
+                    <div class="ibox-title">
+                        <h5>编辑服务菜单</h5>
+                    </div>
+                    <div class="ibox-content">
+                        <button id="add" type="button" class="btn btn-primary pull-right" data-toggle="modal" data-title="新建" data-target="#serviceMenuModal">添加服务菜单</button>
+                        <table class="table table-striped table-bordered table-hover dataTables">
+                            <thead>
+                                <tr>
+                                	<th class="text-center">服务类别</th>
+                                    <th class="text-center">服务标题</th>
+                                    <th class="text-center">操作项</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="serviceMenuModal" tabindex="-1" role="dialog" aria-hidden="true" >
+       	<div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">新建</h4>
+                </div>
+                <div class="modal-body">
+					<form class="form-horizontal" id="myForm">
+						<div class="form-group">
+							<label class="col-sm-2 control-label">服务标题</label>
+							<div class="col-sm-8">
+								<input type="text" class="form-control" id="title">
+							</div>
+						</div>
+						<div class="form-group">
+							<label class="col-sm-2 control-label">服务类别</label>
+							<div class="col-sm-8">
+								<select id="serviceMenuType"
+										class="selectpicker show-tick form-control"
+										data-live-search="false">
+										<option value="0"></option>
+										[#list serviceMenuSelect as sm]
+										<option value="${sm.id}">${sm.name}</option>
+										[/#list]
+								</select>
+							</div>
+						</div>
+						
+						<div class="form-group">
+                             <label class="col-sm-2 control-label">服务内容</label>
+                             <div class="col-sm-8">
+                           	 	<div id="summernote"></div>
+                             </div>
+                        </div>
+					</form>
+                </div>
+                <div class="modal-footer clearfix">
+                    <div class="form-group col-md-8 col-sm-offset-2 text-center">
+                        <button type="button" class="btn btn-primary" id="save">保存</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    [#include "manage/common/js.html" /]
+    <script>
+	   function restForm(){
+		   	$("#title").val("");
+		   	$("#serviceMenuType").val("");
+		   	$('#summernote').summernote('code', "");
+	   } 
+	   
+	   $("#serviceMenuModal").on("hidden.bs.modal", function() {
+		   restForm();
+		});
+	   
+	   $(function() {
+	       $('#summernote').summernote({
+	       	height : 150,
+			lang: 'zh-CN',
+			fontNames: ['Microsoft YaHei', 'DengXian', '新宋体', '黑体'],
+			callbacks: {
+			    onImageUpload: function(files) {
+			    	 var formData = new FormData();
+			            formData.append('file',files[0]);
+			            $.ajax({
+			                url : '${base}/manage/upload',//后台文件上传接口
+			                type : 'POST',
+			                data : formData,
+			                dataType : 'json',
+			                processData : false,
+			                contentType : false,
+			                success : function(data) {
+			                    $('#summernote').summernote('insertImage','${base}/'+data.file.path,'img');
+			                }
+			            });
+			    }
+			}
+	       });
+	   });
+    
+    
+		var serviceMenuId = 0;
+		$('#serviceMenuModal').on('show.bs.modal', function(event) {
+			var button = $(event.relatedTarget);
+			var recipient = button.data('title');
+			var modal = $(this);
+			modal.find('.modal-title').text(recipient);
+			
+			if(recipient == "编辑"){
+				$.post("${base}/manage/serviceMenu/getServiceMenu/"+button.data('id'),function(r){
+					serviceMenuId = r.serviceMenu.id;
+				},'json')
+			}else{
+				serviceMenuId = 0;
+			}
+		});
+
+        $(function(){
+        	dt = $('.dataTables').dataTable({
+				"ordering" : false,
+				"searching" : false,
+				"info" : true,
+				"bLengthChange" : false,
+				"pagingType" : "full_numbers",
+				"language" : {
+					"lengthMenu" : "每页 _MENU_ 条记录",
+					"zeroRecords" : "没有找到记录",
+					"info" : "第 _PAGE_ 页 ( 总共 _PAGES_ 页 )",
+					"infoEmpty" : "无记录",
+					"infoFiltered" : "(从 _MAX_ 条记录过滤)",
+					"sEmptyTable" : "表中数据为空",
+					"sLoadingRecords" : "载入中...",
+					"oPaginate" : {
+						"sFirst" : "首页",
+						"sPrevious" : "上一页",
+						"sNext" : "下一页",
+						"sLast" : "末页"
+					}
+				},
+				"serverSide" : true,
+				"sAjaxSource" : "${base}/manage/serviceMenu/getServiceMenuList",
+				"columns" : [ {
+					"data" : "typeName",
+					"sWidth": "30%"
+				}, {
+					"data" : "title",
+					"sWidth": "60%"
+				}, {
+					"data" : {"id":"id"},
+					"sWidth": "10%",
+					"render" : function(data) {
+						return '<div class="text-center"><button class="btn btn-info btn-sm" type="button" data-title="编辑" data-toggle="modal" data-target="#serviceMenuModal" data-id="'+ data.id+'" onclick="edit('+ data.id+')">编辑</button>'+
+						'&nbsp;&nbsp;<button class="btn btn-warning btn-sm" type="button" onclick="del('+ data.id +')">删除</button><div>';
+					}
+				}  ],
+				"fnServerData" : function(sSource, aoData, fnCallback) {
+					$.ajax({
+						"dataType" : 'json',
+						"type" : "POST",
+						"url" : sSource,
+						"data" : aoData,
+						"success" : fnCallback
+					});
+				}
+			});
+        	
+        })
+        
+        function search(){
+ 			dt.fnFilter();
+ 		}
+	    
+        $("#save").click(function(){
+        	var serviceMenuType = $("#serviceMenuType").val();
+        	if(serviceMenuType == 0){
+        		swal("警告","服务类别不能为空！","warning");
+        		return;
+        	}
+        	var typeName = $("#serviceMenuType").find("option:selected").text();
+        	var title = $("#title").val().trim();
+        	if(title == ""){
+        		swal("警告","服务标题不能为空！","warning");
+        		return;
+        	}
+        	var content = $('#summernote').summernote('code');
+        	$.post("${base}/manage/serviceMenu/save",{
+        		id:serviceMenuId,
+        		serviceMenuType : serviceMenuType,
+        		typeName : typeName,
+        		title: title,
+        		content: content
+        	},function(r){
+        		if(r.code==0){
+        			swal("成功","保存完成！","success");
+        			$('#serviceMenuModal').modal('hide');
+        			search();
+        		}else{
+        			swal("错误",r.msg,"error");
+        		}
+        	},'json')
+        })
+        
+        function edit(id){
+        	$.post("${base}/manage/serviceMenu/getServiceMenu/"+id,function(r){
+				serviceMenuId = r.serviceMenu.id;
+				$("#title").val(r.serviceMenu.title);
+				$("#serviceMenuType").val(r.serviceMenu.serviceMenuType);
+	        	$('#summernote').summernote('code', r.serviceMenu.content);
+	        	serviceMenuId = id;
+			},'json')
+        	
+        }
+        
+        function del(id){
+        	swal({
+				  title: '确定要删除吗?',
+				  type: 'warning',
+				  showCancelButton: true,
+				  cancelButtonColor: '#3085d6',
+				  confirmButtonColor: '#d33',
+				  confirmButtonText: '是的,确定!',
+				  cancelButtonText: '取消'
+				}).then(function () {
+					$.post("${base}/manage/serviceMenu/del/"+id,function(r){
+		        		if(r.code==0){
+		        			swal("成功","已经删除！","success");
+		        			search();
+		        		}
+		        	},'json')
+				})
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.ContactManageDao">
+	<select id="getContactCount" resultType="hl.hyzx.manage.dto.ContactManageDTO">
+		select * from contact
+		order by create_time
+	</select>
+
+	<select id="getContactList" resultType="hl.hyzx.manage.dto.ContactManageDTO">
+		select *
+		from contact
+		order by create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getContact" resultType="hl.hyzx.manage.dto.ContactManageDTO">
+		select * from
+		contact where
+		id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into contact
+		(content,address,phone,mailbox,x,y) values
+		(#{content},#{address},#{phone},#{mailbox},#{x},#{y})
+	</insert>
+
+	<update id="update">
+		update contact set content=#{content},
+		address=#{address},
+		phone=#{phone},mailbox=#{mailbox},x=#{x},y=#{y}
+		where id=#{id}
+	</update>
+
+	<delete id="del">
+		delete from contact where id =#{id}
+	</delete>
+</mapper>

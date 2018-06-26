@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.NoticesManageDao">
+
+	<select id="getNoticeCount" resultType="hl.hyzx.manage.dto.NoticesManageDTO">
+		select n.*,f.path imgPath
+		from notice n left join file f on n.img_id=f.id order by n.id
+	</select>
+	
+	<select id="getNoticeList" resultType="hl.hyzx.manage.dto.NoticesManageDTO">
+		select n.*,f.path imgPath
+		from notice n left join file f on n.img_id=f.id order by n.notice_type DESC,n.create_time limit 
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getNotice" resultType="hl.hyzx.manage.dto.NoticesManageDTO">
+		select n.*,f.path imgPath from
+		notice n left join file f on n.img_id=f.id where n.id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into notice (title,img_id,content,notice_type,type_name) values
+		(#{title},#{imgId},#{content},#{noticeType},#{typeName})
+	</insert>
+
+	<update id="update">
+		update notice set title=#{title},
+		img_id=#{imgId},content=#{content},notice_type=#{noticeType},type_name=#{typeName}
+		where id=#{id}
+	</update>
+	
+	<delete id="del">
+		delete from notice where id =#{id}
+	</delete>
+	
+</mapper>

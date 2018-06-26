@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="hl.hyzx.manage.dao.ServiceMenuManageDao">
+
+	<select id="getServiceMenuCount" resultType="hl.hyzx.manage.dto.ServiceMenuManageDTO">
+		select *
+		from
+		servicemenu order by create_time
+	</select>
+
+	<select id="getServiceMenuList" resultType="hl.hyzx.manage.dto.ServiceMenuManageDTO">
+		select *
+		from
+		servicemenu order by service_menu_type DESC,create_time limit
+		#{iDisplayStart},#{iDisplayLength}
+	</select>
+
+	<select id="getServiceMenu" resultType="hl.hyzx.manage.dto.ServiceMenuManageDTO">
+		select * from
+		servicemenu
+		where id=#{id}
+	</select>
+
+	<insert id="save">
+		insert into servicemenu
+		(title,content,service_menu_type,type_name) values
+		(#{title},#{content},#{serviceMenuType},#{typeName})
+	</insert>
+
+	<update id="update">
+		update servicemenu set
+		title=#{title},content=#{content},service_menu_type=#{serviceMenuType},type_name=#{typeName}
+		where id=#{id}
+	</update>
+
+	<delete id="del">
+		delete from servicemenu where id =#{id}
+	</delete>
+	
+	<select id="getServiceMenuByType" resultType="int">
+		select count(0)
+		from servicemenu where service_menu_type = #{serviceMenuType}
+	</select>
+
+</mapper>

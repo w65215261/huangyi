@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	[#include "client/common/head.html" /]
+</head>
+
+<body>
+	<div class="boxed_wrapper">
+		<section class="theme_menu stricky">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-4">
+						<div class="main-logo">
+							<a href="${base}/"><img src="${base}/img/logo.png" alt=""></a>
+						</div>
+					</div>
+					<div class="col-md-8 menu-column">
+						<nav class="menuzord" id="main_menu">
+						   <ul class="menuzord-menu">
+								<li><a href="${base}/intoClient">走进皇壹</a></li>
+								<li><a href="${base}/flowPathClient">服务流程</a></li>
+								<li><a href="${base}/videoClient?parentId=1">皇壹商学院</a></li>
+								<li><a href="${base}/serviceMenuClient?parentId=3">服务菜单</a></li>
+								<li><a href="${base}/teamDetails">皇壹团队</a></li>	
+								<li><a href="${base}/consultClient">咨询报名</a></li>	
+								<li><a href="${base}/noticeClient?parentId=2">皇壹动态</a></li>
+								<li><a href="${base}/contactClient">战略合作</a></li>
+							</ul> <!-- End of .menuzord-menu -->
+						</nav> <!-- End of #main_menu -->
+					</div>
+				</div>
+			</div> <!-- End of .conatiner -->
+		</section> <!-- End of .theme_menu -->
+        <section class="page-title">
+        	<div class="container">
+            	<div class="row clearfix">
+                    <br><br><br>
+                </div>
+            </div>
+        </section>
+        
+		<section class="service-single">
+			<div class="container">
+				<div class="col-md-12">
+					<ol class="breadcrumb" style="background-color: inherit;">
+					  <li><a href="${base}/">首页</a></li>
+					  [#if flag == 1]
+					  <li><a href="javascript:void(0)" onclick="menuUrl('${menuUrl}');">${fTitle}</a></li>
+				      [/#if]
+					  <li class="active">${title}</li>
+					</ol>
+				</div>
+				<div class="row">     
+					<div class="col-md-12 col-sm-12 col-xs-12">
+						<div class="outer-box">
+							<div class="sec-title col-md-8 col-sm-offset-2 text-center">
+								<h3>${details.detailsTitle}</h3>
+							</div>
+							<div class="content-box col-md-12">
+								<div class="text">
+									<p>${details.detailsContent}</p>
+								</div>
+							</div>						                                                       
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<section class="contact_us">
+			<div class="container">  
+				<div class="col-md-12 col-sm-12 col-xs-12" id="consult">
+	                <div class="sec-title text-center">
+	                    <h2>培训 <span>报名</span></h2>
+	                </div>
+	                <div class="default-form-area">
+						<form class="default-form">
+							<input type="hidden" id="signContent" value="${signId}">
+							<div class="row clearfix">
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="signName" class="form-control" value="" placeholder="请输入姓名!">
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="email" id="signMailbox" class="form-control" value="" placeholder="请输入邮箱地址!">
+									</div>
+								</div>
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="signPhone" class="form-control" placeholder="请输入手机号!">
+									</div>
+								</div>	
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="signQq" class="form-control" placeholder="请输入QQ号码!">
+									</div>
+								</div>	
+								<div class="col-md-6 col-sm-6 col-xs-12">
+									<div class="form-group style-two">
+										<input type="text" id="signWechat" class="form-control" placeholder="请输入微信号码!">
+									</div>
+								</div>	
+							</div>
+							<div class="contact-section-btn text-center">
+								<div class="form-group style-two">
+									<button type="button" class="thm-btn thm-color" onclick="submitSignUp();">提交</button>
+								</div>
+							</div> 
+							<div class="col-md-12 col-sm-12 col-xs-12 text-center">
+								<div class="form-group style-two">
+									<h4 id = "signMsgId" style="color: #7aba1e"></h4>
+								</div>
+							</div>  
+						</form>
+					</div>   
+				</div>
+			</div>
+		</section>
+		
+	<!-- footer -->
+	[#include "client/common/foot.html" /]
+
+	<!-- Scroll Top Button -->
+	<button class="scroll-top tran3s color2_bg">
+		<span class="fa fa-angle-up"></span>
+	</button>
+	<!-- pre loader  -->
+	<div class="preloader"></div>
+
+		[#include "client/common/js.html" /]
+
+	</div>
+	<script>
+	function menuUrl(menuUrl){
+		window.location.href = "${base}/"+menuUrl;
+	}
+	function submitSignUp(){
+		var signName = $("#signName").val().trim();
+    	if(signName == ""){
+    		$("#signMsgId").text("名字不能为空！");
+    		errorColor(0);
+    		return false;
+    	}
+		var signPhone = $("#signPhone").val().trim();
+		if(signPhone == ""){
+			$("#signMsgId").text("电话号码不能为空！");
+			errorColor(0);
+    		return;
+    	}
+		if(!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(signPhone))){ 
+			$("#signMsgId").text("不是完整的11位手机号或者正确的手机号前七位！");
+			errorColor(0);
+    		return;
+		}
+		var signQq = $("#signQq").val();
+		var signWechat = $("#signWechat").val();
+		var signMailbox = $("#signMailbox").val().trim();
+		if(signMailbox == ""){
+			$("#signMsgId").text("邮箱不能为空！");
+			errorColor(0);
+    		return;
+    	}
+		var myreg = /^([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+@([a-zA-Z0-9]+[_|\_|\.]?)*[a-zA-Z0-9]+\.[a-zA-Z]{2,3}$/;
+		if(!myreg.test(signMailbox)){
+			$("#signMsgId").text("请输入有效的E_mail！");
+			errorColor(0);
+    		return;
+		}
+		var signContent = $("#signContent").val();
+		$.post("${base}/saveSignUp",{
+			signName : signName,
+			signPhone :parseInt(signPhone),
+			signQq : signQq,
+			signWechat : signWechat,
+			signMailbox : signMailbox,
+			signContent : signContent
+    	},function(r){
+    		resetForm();
+    		if (r.code == 0) {
+    			errorColor(1);
+    			$("#signMsgId").text("发送成功！");
+			} else {
+				errorColor(0);
+    			$("#signMsgId").text(r.msg);
+			}
+    	},'json')
+	}
+	function resetForm(){
+		$("#signName").val("");
+		$("#signPhone").val("");
+		$("#signQq").val("");
+		$("#signWechat").val("");
+		$("#signMailbox").val("");
+		$("#signMsgId").text("");
+	}
+	
+	function errorColor(flag){ 
+		if(flag == 0){
+			$("#signMsgId").removeAttr("style");
+			$("#signMsgId").attr("style","color:red");
+		}else{
+			$("#signMsgId").removeAttr("style");
+			$("#signMsgId").attr("style","color:#7aba1e");
+		}
+		
+	}
+	</script>
+</body>
+</html>
+
+
+
+
